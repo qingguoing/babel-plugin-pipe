@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/qingguoing/babel-plugin-pipeline/issues"
   },
-  "homepage": "https://github.com/qingguoing/babel-plugin-pipeline#readme"
+  "homepage": "https://github.com/qingguoing/babel-plugin-pipeline#readme",
+  "dependencies": {
+    "@babel/core": "^7.4.0"
+  }
 }
