@@ -1,8 +1,8 @@
 const babel = require("@babel/core");
 const path = require('path');
-const pipeline = require('../src');
+const pipe = require('../src');
 const a = babel.transformFileSync(path.join(__dirname, 'code.js'), {
-  plugins: [pipeline],
+  plugins: [pipe],
 });
 
 console.log(a.code);

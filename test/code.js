@@ -12,4 +12,4 @@ const { a4: b4 = 'xxx' } = test; // @pipeline-line-disabled
 // const { a: { b } = c } = test;
 // const test = {};
 // const { c = 'xxx', ...b } = test;
-// const { a = 'xxx' | 'aaa' | 'bbb' | 'ccc' | 'ddd' | 'eee', ...d } = test;
+const { a = 'xxx' | 'aaa' | 'bbb' | 'ccc' | 'ddd' | 'eee', ...d } = test;
