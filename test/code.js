@@ -1,9 +1,9 @@
-// @pipeline
+// @pipe
 const { a1 } = test;
-// @pipeline-next-line-disabled
+// @pipe-next-line-disabled
 const { a2: b2 } = test;
 const { a3 = 'xxx' } = test;
-const { a4: b4 = 'xxx' } = test; // @pipeline-line-disabled
+const { a4: b4 = 'xxx' } = test; // @pipe-line-disabled
 // const { a: { b: { c } } } = test;
 // const { a: { b = 'xxx' } } = test;
 // const { a: { b } = c } = test;

@@ -16,6 +16,7 @@ module.exports = function({ types: t }) {
         if (!enableFileRegexp.test(value)) {
           return;
         }
+        // 避免多个 babel plugin 共同使用而无效
         path.traverse({
           VariableDeclaration(path) {
             const { node, parent } = path;

@@ -1,9 +1,9 @@
 'use strict'
 const { types: t } = require('@babel/core');
 
-const enableFileRegexp = /@pipeline\b/g;
-const disableNextLineRegexp = /@pipeline-next-line-disabled\b/g;
-const disableLineRegexp = /@pipeline-line-disabled\b/g;
+const enableFileRegexp = /@pipe\b/g;
+const disableNextLineRegexp = /@pipe-next-line-disabled\b/g;
+const disableLineRegexp = /@pipe-line-disabled\b/g;
 
 function hasDisableLineComments(comments = []) {
   for (let i = 0; i < comments.length; i++) {

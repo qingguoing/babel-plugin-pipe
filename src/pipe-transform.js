@@ -50,6 +50,7 @@ module.exports = class PipeTransformer {
         objProps.push(t.objectProperty(patternKey, patternKey, false, true));
       }
     });
+    // 去重，留 patternKey 与 patternValue 不一致的
     objProps = this.deduplicateArrOfObjectProperty(objProps);
     let initExpression = patternInit;
     if (t.isIdentifier(patternInit)) {
