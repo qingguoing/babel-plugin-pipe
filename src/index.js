@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const {
   enableFileRegexp,
@@ -24,8 +24,8 @@ module.exports = function({ types: t }) {
             if (t.isForXStatement(parent)) return;
             if (!variableDeclarationHasPattern(node)) return;
             if (node._filterPluginPassed) return;
-            if (hasDisableLineComments(node.leadingComments)) return;
-            if (hasDisableLineComments(node.trailingComments)) return;
+            if (hasDisableLineComments(node.leadingComments, true)) return;
+            if (hasDisableLineComments(node.trailingComments, false)) return;
 
             const nodes = [];
             node.declarations.forEach(declar => {

@@ -21,6 +21,8 @@ const { a } = test || {};
 const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...rest } = test;
 ```
 
+> ps: fn1、fn2、fn3 函数已经声明
+
 ```js
 // after
 const {
@@ -57,3 +59,7 @@ const { a2: b2 } = test;
 const { a4: b4 = 'xxx' } = test; // @pipe-line-disabled
 const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...rest } = test;
 ```
+
+### TODO
+
+[ ] xx

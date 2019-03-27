@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const { types: t } = require('@babel/core');
 
