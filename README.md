@@ -62,4 +62,4 @@ const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...res
 
 ### TODO
 
-[ ] xx
+ - [ ] xx
