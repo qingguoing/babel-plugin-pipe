@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-pipe",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "a plugin of babel",
   "main": "src/index.js",
   "scripts": {
     "test": "node test/index.js"
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/qingguoing/babel-plugin-pipeline.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["pipe", "pipeline", "Object destructuring"],
+  "author": "qingguoing@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/qingguoing/babel-plugin-pipeline/issues"

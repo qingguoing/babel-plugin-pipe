@@ -60,6 +60,11 @@ const { a4: b4 = 'xxx' } = test; // @pipe-line-disabled
 const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...rest } = test;
 ```
 
-### TODO
+#### for Array
 
- - [ ] xx
+对于数组的转换，现在仅支持 `test` 到 `test || []` 的转换，暂不支持 `pipe` 特性。
+
+### TODO LIST
+
+ - [ ] 数据结构的进一步支持
+ - [ ] 单元测试
