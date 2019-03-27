@@ -9,6 +9,7 @@ const PipeTransformer = require('./pipe-transform');
 
 module.exports = function({ types: t }) {
   return {
+    name: 'pipe',
     visitor: {
       Program(path) {
         let { value = '' } = this.file.ast.comments[0] || {};

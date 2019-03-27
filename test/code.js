@@ -12,4 +12,5 @@ const { a4: b4 = 'xxx' } = test; // @pipe-line-disabled
 // const { a: { b } = c } = test;
 // const test = {};
 // const { c = 'xxx', ...b } = test;
-const { a = 'xxx' | 'aaa' | 'bbb' | 'ccc' | 'ddd' | 'eee', ...d } = test;
+const { a5 = 'xxx' | 'aaa' | 'bbb' | 'ccc' | 'ddd' | 'eee', ...d5 } = test;
+const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...rest } = test;
