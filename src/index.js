@@ -1,7 +1,7 @@
 'use strict';
 
 const {
-  enableFileRegexp,
+  enableFileComment,
   hasDisableLineComments,
   variableDeclarationHasPattern,
 } = require('./util');
@@ -14,7 +14,7 @@ module.exports = function({ types: t }) {
       Program(path) {
         let { value = '' } = this.file.ast.comments[0] || {};
         value = value.trim();
-        if (!enableFileRegexp.test(value)) {
+        if (enableFileComment !== value) {
           return;
         }
         // 避免多个 babel plugin 共同使用而无效

@@ -2,18 +2,21 @@
 
 const { types: t } = require('@babel/core');
 
-const enableFileRegexp = /@pipe\b/g;
-const disableNextLineRegexp = /@pipe-next-line-disabled\b/g;
-const disableLineRegexp = /@pipe-line-disabled\b/g;
+const enableFileComment = "@pipe";
+const disableNextLineComment = "@pipe-next-line-disabled";
+const disableLineComment = "@pipe-line-disabled";
 
 function hasDisableLineComments(comments = [], isLeading = false) {
-  const regExp = isLeading ? disableNextLineRegexp : disableLineRegexp;
-  for (let i = 0; i < comments.length; i++) {
-    let { value = '' } = comments[i];
-    value = value.trim();
-    if (regExp.test(value)) {
-      return true;
-    }
+  const len = comments.length;
+  let { value = '' } = comments[0] || {};
+  let commentPattern = disableLineComment;
+  if (isLeading && len > 0) {
+    commentPattern = disableNextLineComment;
+    value = comments[len - 1].value;
+  }
+  value = value.trim();
+  if (commentPattern === value) {
+    return true;
   }
   return false;
 }
@@ -28,7 +31,7 @@ function variableDeclarationHasPattern(node) {
 }
 
 module.exports = {
-  enableFileRegexp,
+  enableFileComment,
   hasDisableLineComments,
   variableDeclarationHasPattern,
 };
