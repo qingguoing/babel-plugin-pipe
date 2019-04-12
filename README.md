@@ -64,7 +64,20 @@ const { a: { b: { c : d = 'default' | 'fn1 p1' | 'fn2 p2' | 'fn3', },  }, ...res
 
 对于数组的转换，现在仅支持 `test` 到 `test || []` 的转换，暂不支持 `pipe` 特性。
 
+#### NOTICE
+对于下面这种格式，暂时未做转换支持
+```js
+const { a7: { b7 } = c7 } = test;
+const { a8: { b8 } = {} } = test;
+```
+
 ### TODO LIST
 
- - [ ] 数据结构的进一步支持
+ - [ ] 对于如下代码格式的支持
+    ```js
+    const { a7: { b7 } = c7 } = test;
+    const { a8: { b8 } = {} } = test;
+    ```
+ - [ ] 数组结构的进一步支持
+ - [ ] [proposal-pipeline-operator](https://github.com/tc39/proposal-pipeline-operator) 的支持
  - [ ] 单元测试
