@@ -63,52 +63,66 @@ module.exports = class PipeTransformer {
   }
 
   pushArrayPattern(pattern, patternInit) {
+    const { elements } = pattern;
+    const newEle = elements.map(element => {
+      const temp = this.scope.generateUidIdentifier();
+      if (t.isArrayPattern(element)) {
+        this.pushArrayPattern(element, temp);
+        return temp;
+      }
+      if (t.isObjectPattern(element)) {
+        this.pushObjectPattern(element, temp);
+        return temp;
+      }
+      return element;
+    });
     const initExpression = t.logicalExpression('||', patternInit, t.arrayExpression([]));
-    this.nodes.push(t.VariableDeclarator(pattern, initExpression));
+    const patternExpression = t.arrayPattern(newEle);
+    this.nodes.push(t.VariableDeclarator(patternExpression, initExpression));
   }
 
   pushAssignmentPattern(property, objProps) {
-    const { key, value } = property;
-    const { left: patternLeft, right: patternRight } = value;
-    if (t.isBinaryExpression(patternRight)) {
-      const temp = this.scope.generateUidIdentifierBasedOnNode(patternLeft);
-      this.filterFnArr = [];
-      const defaultValue = this.pushBinaryExpression(patternRight);
-      this.handleFilterFun(patternLeft, temp);
-      const assignPattern = t.assignmentPattern(temp, defaultValue);
-      const objProp = t.objectProperty(key, assignPattern, false, false);
-      objProps.push(objProp);
-    } else {
+    // const { key, value } = property;
+    // const { left: patternLeft, right: patternRight } = value;
+    // if (t.isBinaryExpression(patternRight)) {
+    //   const temp = this.scope.generateUidIdentifierBasedOnNode(patternLeft);
+    //   this.filterFnArr = [];
+    //   const defaultValue = this.pushBinaryExpression(patternRight);
+    //   this.handleFilterFun(patternLeft, temp);
+    //   const assignPattern = t.assignmentPattern(temp, defaultValue);
+    //   const objProp = t.objectProperty(key, assignPattern, false, false);
+    //   objProps.push(objProp);
+    // } else {
       objProps.push(t.cloneNode(property));
-    }
+    // }
   }
 
-  pushBinaryExpression(patternRight) {
-    const { left, right } = patternRight;
-    this.filterFnArr.push(right.value);
-    if (t.isBinaryExpression(left)) {
-      return this.pushBinaryExpression(left);
-    }
-    return left;
-  }
+  // pushBinaryExpression(patternRight) {
+  //   const { left, right } = patternRight;
+  //   this.filterFnArr.push(right.value);
+  //   if (t.isBinaryExpression(left)) {
+  //     return this.pushBinaryExpression(left);
+  //   }
+  //   return left;
+  // }
 
-  handleFilterFun(origin, temp) {
-    const len = this.filterFnArr.length;
-    let tempCenter = origin;
-    let tempParam = temp;
-    this.filterFnArr.forEach((filterFn, i) => {
-      const fnArr = filterFn.split(' ');
-      const fnName = fnArr.shift();
-      const fnParams = fnArr.map(str => t.stringLiteral(str));
-      tempParam = i === len - 1 ? temp : this.scope.generateUidIdentifierBasedOnNode(tempParam);
-      const fun = t.callExpression(t.identifier(fnName), [tempParam, ...fnParams]);
-      this.nodes.push(t.VariableDeclarator(tempCenter, fun));
-      tempCenter = tempParam;
-      if (i === len - 1) {
-        tempParam = temp;
-      }
-    });
-  }
+  // handleFilterFun(origin, temp) {
+  //   const len = this.filterFnArr.length;
+  //   let tempCenter = origin;
+  //   let tempParam = temp;
+  //   this.filterFnArr.forEach((filterFn, i) => {
+  //     const fnArr = filterFn.split(' ');
+  //     const fnName = fnArr.shift();
+  //     const fnParams = fnArr.map(str => t.stringLiteral(str));
+  //     tempParam = i === len - 1 ? temp : this.scope.generateUidIdentifierBasedOnNode(tempParam);
+  //     const fun = t.callExpression(t.identifier(fnName), [tempParam, ...fnParams]);
+  //     this.nodes.push(t.VariableDeclarator(tempCenter, fun));
+  //     tempCenter = tempParam;
+  //     if (i === len - 1) {
+  //       tempParam = temp;
+  //     }
+  //   });
+  // }
   
   reverseNodes() {
     this.nodes.reverse();
