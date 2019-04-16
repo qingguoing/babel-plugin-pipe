@@ -36,7 +36,10 @@ module.exports = class PipeTransformer {
       }
       const { key, value } = property;
       if (t.isAssignmentPattern(value)) {
-        this.pushAssignmentPattern(property, objProps);
+        const { left, right } = value;
+        const temp = this.scope.generateUidIdentifier();
+        objProps.push(t.objectProperty(key, temp, false, false));
+        this.pushAssignmentPattern(left, temp, right);
         return;
       }
       if (t.isPattern(value)) {
@@ -53,7 +56,7 @@ module.exports = class PipeTransformer {
     // 去重，留 patternKey 与 patternValue 不一致的
     objProps = this.deduplicateArrOfObjectProperty(objProps);
     let initExpression = patternInit;
-    if (!t.isObjectExpression(patternInit) && !t.isArrayExpression(patternInit)) {
+    if (!t.isObjectExpression(patternInit)) {
       initExpression = t.logicalExpression('||', patternInit, t.objectExpression([]));
     }
     if (restElement) {
@@ -62,7 +65,7 @@ module.exports = class PipeTransformer {
     this.nodes.push(t.VariableDeclarator(t.objectPattern(objProps), initExpression));
   }
 
-  pushArrayPattern(pattern, patternInit) {
+  pushArrayPattern(pattern, patternInit, defaultNode) {
     const { elements } = pattern;
     const newEle = elements.map(element => {
       const temp = this.scope.generateUidIdentifier();
@@ -74,14 +77,24 @@ module.exports = class PipeTransformer {
         this.pushObjectPattern(element, temp);
         return temp;
       }
+      if (t.isAssignmentPattern(element)) {
+        const { left, right } = element;
+        this.pushAssignmentPattern(left, temp, right);
+        return temp;
+      }
       return element;
     });
-    const initExpression = t.logicalExpression('||', patternInit, t.arrayExpression([]));
+    let initExpression = patternInit;
+    if (!t.isArrayExpression(patternInit)) {
+      initExpression = t.logicalExpression('||', patternInit, t.arrayExpression([]));
+    }
     const patternExpression = t.arrayPattern(newEle);
     this.nodes.push(t.VariableDeclarator(patternExpression, initExpression));
   }
 
-  pushAssignmentPattern(property, objProps) {
+  pushAssignmentPattern(element, init, defaultInit) {
+    const initExpression = t.logicalExpression('||', init, defaultInit);
+    this.nodes.push(t.VariableDeclarator(element, initExpression));
     // const { key, value } = property;
     // const { left: patternLeft, right: patternRight } = value;
     // if (t.isBinaryExpression(patternRight)) {
@@ -93,7 +106,6 @@ module.exports = class PipeTransformer {
     //   const objProp = t.objectProperty(key, assignPattern, false, false);
     //   objProps.push(objProp);
     // } else {
-      objProps.push(t.cloneNode(property));
     // }
   }
 
