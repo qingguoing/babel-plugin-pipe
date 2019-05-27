@@ -1,0 +1,2 @@
+// @pipe
+const { a } = test;
