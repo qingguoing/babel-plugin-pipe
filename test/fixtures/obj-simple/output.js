@@ -2,3 +2,4 @@
 const {
   a
 } = test || {};
+const {} = test;

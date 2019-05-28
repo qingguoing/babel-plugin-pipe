@@ -56,7 +56,7 @@ module.exports = class PipeTransformer {
     // 去重，留 patternKey 与 patternValue 不一致的
     objProps = this.deduplicateArrOfObjectProperty(objProps);
     let initExpression = patternInit;
-    if (!t.isObjectExpression(patternInit)) {
+    if (t.isIdentifier(patternInit)) {
       initExpression = t.logicalExpression('||', patternInit, t.objectExpression([]));
     }
     if (restElement) {
@@ -65,8 +65,12 @@ module.exports = class PipeTransformer {
     this.nodes.push(t.VariableDeclarator(t.objectPattern(objProps), initExpression));
   }
 
-  pushArrayPattern(pattern, patternInit, defaultNode) {
+  pushArrayPattern(pattern, patternInit) {
     const { elements } = pattern;
+    if (!elements.length) {
+      this.nodes.push(t.VariableDeclarator(pattern, patternInit));
+      return;
+    }
     const newEle = elements.map(element => {
       const temp = this.scope.generateUidIdentifier();
       if (t.isArrayPattern(element)) {
@@ -85,7 +89,7 @@ module.exports = class PipeTransformer {
       return element;
     });
     let initExpression = patternInit;
-    if (!t.isArrayExpression(patternInit)) {
+    if (t.isIdentifier(patternInit)) {
       initExpression = t.logicalExpression('||', patternInit, t.arrayExpression([]));
     }
     const patternExpression = t.arrayPattern(newEle);
