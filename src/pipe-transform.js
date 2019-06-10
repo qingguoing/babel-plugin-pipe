@@ -97,48 +97,25 @@ module.exports = class PipeTransformer {
   }
 
   pushAssignmentPattern(element, init, defaultInit) {
-    const initExpression = t.logicalExpression('||', init, defaultInit);
-    this.nodes.push(t.VariableDeclarator(element, initExpression));
-    // const { key, value } = property;
-    // const { left: patternLeft, right: patternRight } = value;
-    // if (t.isBinaryExpression(patternRight)) {
-    //   const temp = this.scope.generateUidIdentifierBasedOnNode(patternLeft);
-    //   this.filterFnArr = [];
-    //   const defaultValue = this.pushBinaryExpression(patternRight);
-    //   this.handleFilterFun(patternLeft, temp);
-    //   const assignPattern = t.assignmentPattern(temp, defaultValue);
-    //   const objProp = t.objectProperty(key, assignPattern, false, false);
-    //   objProps.push(objProp);
-    // } else {
-    // }
+    const { operator } = defaultInit;
+    if (t.isBinaryExpression(defaultInit) && operator === '|>') {
+      this.handleBinaryExpressionPipelineOperator(init, defaultInit);
+      this.nodes.push(t.VariableDeclarator(element, defaultInit));
+    } else {
+      const initExpression = t.logicalExpression('||', init, defaultInit);
+      this.nodes.push(t.VariableDeclarator(element, initExpression));
+    }
   }
 
-  // pushBinaryExpression(patternRight) {
-  //   const { left, right } = patternRight;
-  //   this.filterFnArr.push(right.value);
-  //   if (t.isBinaryExpression(left)) {
-  //     return this.pushBinaryExpression(left);
-  //   }
-  //   return left;
-  // }
-
-  // handleFilterFun(origin, temp) {
-  //   const len = this.filterFnArr.length;
-  //   let tempCenter = origin;
-  //   let tempParam = temp;
-  //   this.filterFnArr.forEach((filterFn, i) => {
-  //     const fnArr = filterFn.split(' ');
-  //     const fnName = fnArr.shift();
-  //     const fnParams = fnArr.map(str => t.stringLiteral(str));
-  //     tempParam = i === len - 1 ? temp : this.scope.generateUidIdentifierBasedOnNode(tempParam);
-  //     const fun = t.callExpression(t.identifier(fnName), [tempParam, ...fnParams]);
-  //     this.nodes.push(t.VariableDeclarator(tempCenter, fun));
-  //     tempCenter = tempParam;
-  //     if (i === len - 1) {
-  //       tempParam = temp;
-  //     }
-  //   });
-  // }
+  // 处理 PipelineOperator， 确保传入到 pipelineOperator 的是原始值，其次才是默认值
+  handleBinaryExpressionPipelineOperator(init, defaultInit) {
+    const { left } = defaultInit;
+    if (t.isBinaryExpression(left) && left.operator === '|>') {
+      this.handleBinaryExpressionPipelineOperator(init, left);
+    } else {
+      defaultInit.left = t.logicalExpression('||', init, left);
+    }
+  }
   
   reverseNodes() {
     this.nodes.reverse();
