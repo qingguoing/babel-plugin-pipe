@@ -12,23 +12,31 @@ describe('with-plugin-transform-destructing', function() {
         plugins: [pipe, desctructingPlugin],
       }
     ).code;
-
     new Function('assert', `
       ${compiledCode}
-      assert(a, 'xxx');
-      assert(b, 'bbb');
-      assert(typeof c, 'undefined');
-      assert(c1, 'ccc');
-      assert(d, {
-        d: 'ddd',
+      assert.strictEqual(a, 'xxx');
+      assert.strictEqual(b, 'bbb');
+      assert.strictEqual(typeof c, 'undefined');
+      assert.strictEqual(c1, 'ccc');
+      assert.deepStrictEqual(d, {
+        g: 'ggg',
+      });
+      assert.deepStrictEqual(e, {
         e: 'eee',
         f: 'fff',
+        h: {
+          i: 'iii'
+        }
       });
-      assert(xxx, 'arr xxxx');
-      assert(restArr, ['arr yyy', 'arr xzzz', 'arr www']);
+      assert.strictEqual(g, 'ggg');
+      assert.strictEqual(h, 'hello world');
+      assert.strictEqual(x, 'arr xxx');
+      assert.strictEqual(y, 'hello');
+      assert.strictEqual(z, 'world');
+      assert.deepStrictEqual(restArr, ['arr yyy', 'arr zzz', 'arr www', [ 'name' ]]);
     `)(assert);
   });
-  it('code execed result reversed', function() {
+  it('code execed result width plugins order reversed', function() {
     const compiledCode = babel.transformFileSync(
       path.join(__dirname, 'with-destructing-plugin', 'code.js'),
       {
@@ -38,17 +46,25 @@ describe('with-plugin-transform-destructing', function() {
 
     new Function('assert', `
       ${compiledCode}
-      assert(a, 'xxx');
-      assert(b, 'bbb');
-      assert(typeof c, 'undefined');
-      assert(c1, 'ccc');
-      assert(d, {
-        d: 'ddd',
+      console.log(typeof d);
+      assert.strictEqual(a, 'xxx');
+      assert.strictEqual(b, 'bbb');
+      assert.strictEqual(typeof c, 'undefined');
+      assert.strictEqual(c1, 'ccc');
+      assert.strictEqual(typeof d, 'undefined');
+      assert.deepStrictEqual(e, {
         e: 'eee',
         f: 'fff',
+        h: {
+          i: 'iii'
+        }
       });
-      assert(xxx, 'arr xxx');
-      assert(restArr, ['arr yyy', 'arr zzz', 'arr www']);
+      assert.strictEqual(g, 'ggg');
+      assert.strictEqual(h, 'hello world');
+      assert.strictEqual(x, 'arr xxx');
+      assert.strictEqual(y, 'hello');
+      assert.strictEqual(z, 'world');
+      assert.deepStrictEqual(restArr, ['arr yyy', 'arr zzz', 'arr www', [ 'name' ]]);
     `)(assert);
   });
 });
