@@ -1,5 +1,4 @@
 const path = require('path');
-const desctructingPlugin = require('@babel/plugin-transform-destructuring');
 const babel = require('@babel/core');
 const pipe = require('../src');
 const assert = require('assert').strict;
@@ -9,7 +8,7 @@ describe('with-plugin-transform-destructing', function() {
     const compiledCode = babel.transformFileSync(
       path.join(__dirname, 'with-destructing-plugin', 'code.js'),
       {
-        plugins: [pipe, desctructingPlugin],
+        plugins: [pipe, '@babel/plugin-transform-destructuring'],
       }
     ).code;
     new Function('assert', `
@@ -30,41 +29,15 @@ describe('with-plugin-transform-destructing', function() {
       });
       assert.strictEqual(g, 'ggg');
       assert.strictEqual(h, 'hello world');
+      assert.strictEqual(w, 'www');
+      assert.strictEqual(w1, 'hello world');
       assert.strictEqual(x, 'arr xxx');
       assert.strictEqual(y, 'hello');
       assert.strictEqual(z, 'world');
       assert.deepStrictEqual(restArr, ['arr yyy', 'arr zzz', 'arr www', [ 'name' ]]);
-    `)(assert);
-  });
-  it('code execed result width plugins order reversed', function() {
-    const compiledCode = babel.transformFileSync(
-      path.join(__dirname, 'with-destructing-plugin', 'code.js'),
-      {
-        plugins: [desctructingPlugin, pipe],
-      }
-    ).code;
-
-    new Function('assert', `
-      ${compiledCode}
-      console.log(typeof d);
-      assert.strictEqual(a, 'xxx');
-      assert.strictEqual(b, 'bbb');
-      assert.strictEqual(typeof c, 'undefined');
-      assert.strictEqual(c1, 'ccc');
-      assert.strictEqual(typeof d, 'undefined');
-      assert.deepStrictEqual(e, {
-        e: 'eee',
-        f: 'fff',
-        h: {
-          i: 'iii'
-        }
-      });
-      assert.strictEqual(g, 'ggg');
-      assert.strictEqual(h, 'hello world');
-      assert.strictEqual(x, 'arr xxx');
-      assert.strictEqual(y, 'hello');
-      assert.strictEqual(z, 'world');
-      assert.deepStrictEqual(restArr, ['arr yyy', 'arr zzz', 'arr www', [ 'name' ]]);
+      assert.strictEqual(arrU, 'uuu');
+      assert.strictEqual(arrV, 'vvv');
+      assert.strictEqual(arrW, 'hello world');
     `)(assert);
   });
 });

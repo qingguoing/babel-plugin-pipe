@@ -3,3 +3,6 @@ test/
 .gitignore
 package-lock.json
 .vscode/
+code.js
+test.js
+coverage/

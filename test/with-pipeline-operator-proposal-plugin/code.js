@@ -21,6 +21,12 @@ const {
     h = test |> filterB |> filterC
   },
   c: c1 = 'zzz' |> filterA,
+  u: {
+    v: {
+      w = 'www' |> filterC,
+      w1 = test |> filterC |> filterA,
+    }
+  },
   ...e
 } = obj;
 const arr = ['arr xxx', [ 'hello', 'world' ], 'arr yyy', 'arr zzz', 'arr www', [ 'name' ] ];
@@ -30,6 +36,6 @@ const [
     y = '' |> filterA |> filterC,
     z = '' |> filterB |> filterC,
   ],
-  w = '' |> filterA,
+  arrW = '' |> filterA,
   ...restArr
 ] = arr;
