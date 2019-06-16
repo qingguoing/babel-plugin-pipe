@@ -2,6 +2,8 @@
 
 const { types: t } = require('@babel/core');
 
+const pipelineOperator = '|>';
+
 module.exports = class PipeTransformer {
   constructor(opts) {
     this.nodes = opts.nodes || [];
@@ -98,7 +100,7 @@ module.exports = class PipeTransformer {
 
   pushAssignmentPattern(element, init, defaultInit) {
     const { operator } = defaultInit;
-    if (t.isBinaryExpression(defaultInit) && operator === '|>') {
+    if (t.isBinaryExpression(defaultInit) && operator === pipelineOperator) {
       this.handleBinaryExpressionPipelineOperator(init, defaultInit);
       this.nodes.push(t.VariableDeclarator(element, defaultInit));
     } else {
@@ -110,7 +112,7 @@ module.exports = class PipeTransformer {
   // 处理 PipelineOperator， 确保传入到 pipelineOperator 的是原始值，其次才是默认值
   handleBinaryExpressionPipelineOperator(init, defaultInit) {
     const { left } = defaultInit;
-    if (t.isBinaryExpression(left) && left.operator === '|>') {
+    if (t.isBinaryExpression(left) && left.operator === pipelineOperator) {
       this.handleBinaryExpressionPipelineOperator(init, left);
     } else {
       defaultInit.left = t.logicalExpression('||', init, left);
