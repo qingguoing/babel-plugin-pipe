@@ -6,3 +6,4 @@ package-lock.json
 code.js
 test.js
 coverage/
+.travis.yml
