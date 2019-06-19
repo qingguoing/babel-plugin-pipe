@@ -3,6 +3,7 @@ node_js:
   - "10"
 install:
   - npm install -g codecov istanbul
+  - npm install
 script:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
+  - istanbul cover node_modules/mocha/bin/_mocha
   - codecov
