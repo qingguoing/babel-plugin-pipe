@@ -2,6 +2,7 @@
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
+[![codecov](codecov-image)](codecov-url)
 
 一款协助处理对象解构过程中的 null 和 undefined 的 babel 插件
 
@@ -84,3 +85,5 @@ MIT
 [npm-url]: https://www.npmjs.com/package/babel-plugin-pipe
 [travis-image]: https://travis-ci.com/qingguoing/babel-plugin-pipe.svg?branch=master
 [travis-url]: https://travis-ci.com/qingguoing/babel-plugin-pipe
+[codecov-image]: https://codecov.io/gh/qingguoing/babel-plugin-pipe/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/qingguoing/babel-plugin-pipe
